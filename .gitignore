@@ -1,0 +1,6 @@
+*.out
+*.o
+src/*.o
+obj/
+.vscode/
+.VSCodeCounter/
