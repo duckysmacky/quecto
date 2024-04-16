@@ -12,7 +12,7 @@ very much wip
 
 `> make`
 
-should theoretically work on both windows and linux
+only works on linux for now
 
 # todo
 - make tabs work
