@@ -5,7 +5,13 @@
 	(c) shroomwastaken 2024
 */
 
+#ifdef _WIN32
+#include <ncurses/curses.h>
+#include <stdio.h>
+#else
 #include <curses.h>
+#endif
+
 #include <assert.h>
 #include <string.h>
 #include <stdlib.h>
