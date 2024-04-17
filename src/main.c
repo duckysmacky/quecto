@@ -17,6 +17,12 @@
 #define ENTER 10
 #define TAB 9
 
+// ctrl + arrow has to be compared with the keyname() function
+#define CTRLUP "kUP5"
+#define CTRLDOWN "kDN5"
+#define CTRLLEFT "kLFT5"
+#define CTRLRIGHT "kRIT5"
+
 // limit defines
 #define MAX_ROWS 1024
 #define MAX_STRING_SIZE 1025
@@ -125,40 +131,47 @@ void process_keypress(int ch, buffer_t* buffer) {
 		}
 		fclose(file);
 		QUIT = 1;
-	} else if (ch == KEY_DC) {
+	} else if (ch == KEY_DC || ch == KEY_RESIZE) {
 		// ill add it later
 	} else if (ch == KEY_BACKSPACE) {
 		if (buffer->cur_pos == 0) {
 			if (buffer->row_index != 0) {
 				row_t* cur = &buffer->rows[--buffer->row_index];
 				buffer->cur_pos = cur->size;
-				move(buffer->row_index, buffer->cur_pos);
 				delete_and_append_row(buffer, cur->index + 1);
 			}
 		} else {
 			row_t* cur = &buffer->rows[buffer->row_index];
 			shift_row_left(cur, --buffer->cur_pos);
-			move(state.y, buffer->cur_pos);
 		}
 	} else if (ch == ENTER) {
 		row_t* cur = &buffer->rows[buffer->row_index];
 		create_and_cut_row(buffer, buffer->row_index + 1, &cur->size, buffer->cur_pos);
 		buffer->row_index++;
 		buffer->cur_pos = 0;
-		move(buffer->row_index, buffer->cur_pos);
+	} else if (ch == TAB) {
+		// catch tab early
+		row_t* cur = &buffer->rows[buffer->row_index];
+		for (size_t i = 0; i < 4; i++) {
+			shift_row_right(cur, buffer->cur_pos);
+			cur->contents[buffer->cur_pos++] = ' ';
+		}
 	} else if (ch == ctrl(ch)) {
 		// dont add ctrl characters to buffer
-		// this wont work for ctrl + j and ctrl + m cause theyre the same as enter
-	} else if (ch == KEY_UP) {
+		// this wont work for ctrl + j, ctrl + m cause theyre the same as enter
+		// and ctrl + i cause its the same as tab
+	} else if (ch == KEY_UP || strcmp(keyname(ch), CTRLUP) == 0) {
 		if (buffer->row_index != 0) buffer->row_index--;
 		// snap cursor to beginning of line if at first line
 		else buffer->cur_pos = 0;
-	} else if (ch == KEY_DOWN) {
+	} else if (ch == KEY_DOWN || strcmp(keyname(ch), CTRLDOWN) == 0) {
 		if (buffer->row_index < buffer->row_s) buffer->row_index++;
 		// snap cursor to eol if at last line
 		else buffer->cur_pos = buffer->rows[buffer->row_index].size;
 	} else if (ch == KEY_LEFT) {
-		if (buffer->cur_pos != 0) { buffer->cur_pos--; }
+		if (buffer->cur_pos != 0) {
+			buffer->cur_pos--;
+		}
 		// go to previous line if at beginning of line and not at first line
 		else if (buffer->row_index != 0) {
 			buffer->row_index--;
@@ -172,9 +185,9 @@ void process_keypress(int ch, buffer_t* buffer) {
 		}
 	} else {
 		row_t* cur = &buffer->rows[buffer->row_index];
+		// ill add proper tabs later, just replaces with 4 spaces for now :(
 		shift_row_right(cur, buffer->cur_pos);
 		cur->contents[buffer->cur_pos++] = (char) ch; // probably bad
-		move(state.y, buffer->cur_pos);
 	}
 	// clamp the cursor to line end
 	if (buffer->cur_pos > buffer->rows[buffer->row_index].size)
@@ -196,7 +209,7 @@ void draw_buffer(buffer_t* buffer) {
 
 void draw_status_bar(buffer_t* buffer, int* ch) {
 	mvprintw(
-		state.y - 1, state.x - 20, "%.4zu | %.3zu:%.3zu (%.3zu)",
+		state.y - 1, state.x - 30, "%04d | %.3zu:%.3zu (%.3zu)",
 		*ch, buffer->row_index + 1, buffer->cur_pos + 1, buffer->row_s + 1
 	);
 	move(state.crow, state.ccol);
