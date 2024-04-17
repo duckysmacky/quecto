@@ -4,7 +4,12 @@ CFLAGS = -std=c99 -Wall -I.
 LINKER = gcc
 LFLAGS = -Wall -I. -lm
 
-SRCS := $(shell find src -name '*.c')
+ifeq ($(OS),Windows_NT)
+	SRCS := $(shell where.exe /r src *.c*)
+else
+	SRCS := $(shell find src -name '*.c')
+endif
+
 OBJS := $(SRCS:src/%.c=obj/%.o)
 
 RM = rm -f
@@ -12,7 +17,11 @@ RM = rm -f
 all: $(TARGET)
 
 $(TARGET): $(OBJS)
+ifeq ($(OS),Windows_NT)
+	@$(LINKER) $(LFLAGS) $(OBJS) -o $@ -lncurses -DNCURSES_STATIC
+else
 	@$(LINKER) $(LFLAGS) $(OBJS) -o $@ -lcurses
+endif
 	@echo "Linking complete!"
 
 obj/%.o: src/%.c

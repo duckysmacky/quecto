@@ -12,7 +12,11 @@ very much wip
 
 `> make`
 
-only works on linux for now
+works on both linux (out of the box)
+
+and windows (assuming you have the mingw64 toolchain although others have not been tested and might work)
+
+also windows for some readon has a weird flicker effect when rendering the buffer
 
 # todo
 - make tabs work
@@ -20,3 +24,4 @@ only works on linux for now
 - line numbers
 - minimal commands (ctrl + x = something)
 - organize the code
+- fix flicker on windows

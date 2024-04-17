@@ -264,7 +264,7 @@ int main(int argc, char* argv[]) {
 
 	// buffer init
 	buffer_t buffer = {0};
-	for (size_t i; i < MAX_ROWS; i++) {
+	for (size_t i = 0; i < MAX_ROWS; i++) {
 		buffer.rows[i].contents = calloc(MAX_STRING_SIZE, sizeof(char));
 	}
 	if (filename != NULL) read_file_to_buffer(&buffer, filename);
