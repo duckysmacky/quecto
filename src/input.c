@@ -4,6 +4,8 @@
 
 // most of these are borrowed from cano
 
+char QUIT = 0;
+
 void shift_rows_left(buffer_t* buf, size_t index) {
 	assert(buf->row_s + 1 < MAX_ROWS);
 	for(size_t i = index; i < buf->row_s; i++) {
@@ -69,7 +71,7 @@ void create_and_cut_row(buffer_t* buf, size_t dest_index, size_t* str_s, size_t 
 	free(temp);
 }
 
-void process_keypress(int ch, buffer_t* buffer) {
+void process_keypress(int ch, buffer_t* buffer, state_t *state) {
 	if (ch == ctrl('s') || ch == ctrl('S')) {
 		FILE* file = fopen(buffer->filename, "w");
 		for (size_t i = 0; i <= buffer->row_s; i++) {
@@ -140,7 +142,7 @@ void process_keypress(int ch, buffer_t* buffer) {
 	if (buffer->cur_pos > buffer->rows[buffer->row_index].size)
 		buffer->cur_pos = buffer->rows[buffer->row_index].size;
 	// move cursor
-	state.ccol = buffer->cur_pos;
-	state.crow = buffer->row_index;
+	state->ccol = buffer->cur_pos;
+	state->crow = buffer->row_index;
 	move(state.crow, state.ccol);
 }

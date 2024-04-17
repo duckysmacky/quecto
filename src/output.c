@@ -2,6 +2,8 @@
 
 #include "include/output.h"
 
+char QUIT = 0;
+
 void draw_buffer(buffer_t* buffer) {
 	for (size_t i = 0; i <= buffer->row_s; i++) {
 		mvprintw(i, 0, "%s", buffer->rows[i].contents);

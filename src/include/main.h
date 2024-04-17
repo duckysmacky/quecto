@@ -34,8 +34,6 @@
 
 #define ESCDELAY 10
 
-/* TYPEDEFS */
-
 /* DATA */
 
 typedef struct ROW {
@@ -51,6 +49,11 @@ typedef struct BUFFER {
 	size_t row_s;
 	char* filename;
 } buffer_t, *pbuffer_t;
+
+typedef struct STATE {
+	int y, x;
+	int crow, ccol;
+} state_t, *pstate_t;
 
 // local libs
 #include "input.h"

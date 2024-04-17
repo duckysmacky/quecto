@@ -7,16 +7,15 @@
 
 #include "include/main.h"
 
-struct STATE {
-	int y, x;
-	int crow, ccol;
-} state;
+/* INIT */
+
+// TODO - fix "state"
 
 char QUIT = 0;
 
-/* INIT */
-
 int main(int argc, char* argv[]) {
+	state_t state;
+
 	// check if given name
 	char* filename = NULL;
 	if (argc > 1) filename = argv[1];
