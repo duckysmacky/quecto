@@ -5,16 +5,21 @@
 	(c) shroomwastaken 2024
 */
 
+/*
+	latest changes kinda broke some parts, but honestly i
+	dont really know this code (unreadable asf 😭😭)
+	tried my best to split it into seperate files for re-usability
+	and better readability
+	everything compiles (but crashes)
+*/
+
 #include "include/main.h"
 
 /* INIT */
 
-// TODO - fix "state"
-
-
 int main(int argc, char* argv[]) {
 	bool QUIT = false;
-	pstate_t state;
+	pstate_t state = malloc(sizeof(state));
 
 	// check if given name
 	char* filename = NULL;

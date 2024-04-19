@@ -11,6 +11,7 @@ else
 endif
 
 OBJS := $(SRCS:src/%.c=obj/%.o)
+# OBJS := obj/input.o obj/output.o
 
 RM = rm -f
 
@@ -18,15 +19,15 @@ all: $(TARGET)
 
 $(TARGET): $(OBJS)
 ifeq ($(OS),Windows_NT)
-	@$(LINKER) $(LFLAGS) $(OBJS) -o $@ -lncurses -DNCURSES_STATIC
+	$(LINKER) $(LFLAGS) $(OBJS) -o $@ -lncurses -DNCURSES_STATIC
 else
 	@$(LINKER) $(LFLAGS) $(OBJS) -o $@ -lcurses
 endif
 	@echo "Linking complete!"
 
 obj/%.o: src/%.c
-	@mkdir -p $(@D)
-	@$(CC) $(CFLAGS) -c $< -o $@
+	@mkdir $(@D)
+	$(CC) $(CFLAGS) -c $< -o $@
 	@echo "Compilation complete!"
 
 clean:
