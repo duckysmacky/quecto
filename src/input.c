@@ -4,8 +4,6 @@
 
 // most of these are borrowed from cano
 
-char QUIT = 0;
-
 void shift_rows_left(buffer_t* buf, size_t index) {
 	assert(buf->row_s + 1 < MAX_ROWS);
 	for(size_t i = index; i < buf->row_s; i++) {
@@ -71,7 +69,7 @@ void create_and_cut_row(buffer_t* buf, size_t dest_index, size_t* str_s, size_t 
 	free(temp);
 }
 
-void process_keypress(int ch, buffer_t* buffer, state_t *state) {
+void process_keypress(int ch, buffer_t* buffer, pstate_t state, bool *pquit) {
 	if (ch == ctrl('s') || ch == ctrl('S')) {
 		FILE* file = fopen(buffer->filename, "w");
 		for (size_t i = 0; i <= buffer->row_s; i++) {
@@ -79,7 +77,7 @@ void process_keypress(int ch, buffer_t* buffer, state_t *state) {
 			fputc('\n', file);
 		}
 		fclose(file);
-		QUIT = 1;
+		pquit = (bool *) true;
 	} else if (ch == KEY_DC || ch == KEY_RESIZE) {
 		// ill add it later
 	} else if (ch == KEY_BACKSPACE) {
@@ -144,5 +142,5 @@ void process_keypress(int ch, buffer_t* buffer, state_t *state) {
 	// move cursor
 	state->ccol = buffer->cur_pos;
 	state->crow = buffer->row_index;
-	move(state.crow, state.ccol);
+	move(state->crow, state->ccol);
 }

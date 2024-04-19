@@ -11,10 +11,10 @@
 
 // TODO - fix "state"
 
-char QUIT = 0;
 
 int main(int argc, char* argv[]) {
-	state_t state;
+	bool QUIT = false;
+	pstate_t state;
 
 	// check if given name
 	char* filename = NULL;
@@ -25,7 +25,7 @@ int main(int argc, char* argv[]) {
 	raw();
 	keypad(stdscr, TRUE);
 	noecho();
-	getmaxyx(stdscr, state.y, state.x);
+	getmaxyx(stdscr, state->y, state->x);
 	set_escdelay(ESCDELAY);
 
 	// buffer init
@@ -38,16 +38,18 @@ int main(int argc, char* argv[]) {
 
 	// main loop
 	int ch = 0;
-	while (ch != ctrl('q') && QUIT != 1) {
+	while (ch != ctrl('q') && QUIT != true) {
 		clear();
-		getmaxyx(stdscr, state.y, state.x);
+		getmaxyx(stdscr, state->y, state->x);
 		refresh();
-		draw_status_bar(&buffer, &ch);
-		draw_buffer(&buffer);
+		draw_status_bar(&buffer, &ch, state);
+		draw_buffer(&buffer, state);
 		ch = getch();
-		process_keypress(ch, &buffer);
-		getyx(stdscr, state.crow, state.ccol);
+		process_keypress(ch, &buffer, state, &QUIT);
+		getyx(stdscr, state->crow, state->ccol);
 	}
+
+	free(state);
 
 	refresh();
 	endwin();
