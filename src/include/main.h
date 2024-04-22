@@ -1,5 +1,4 @@
-#ifndef __MAIN_H__
-#define __MAIN_H__
+#pragma once
 
 // OS-dependent libs
 #ifdef _WIN32
@@ -62,5 +61,3 @@ typedef struct STATE {
 /* Functions */
 
 void read_file_to_buffer(buffer_t* buffer, char* filename);
-
-#endif // __MAIN_H__

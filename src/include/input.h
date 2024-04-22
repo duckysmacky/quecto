@@ -1,5 +1,4 @@
-#ifndef __INPUT_H__
-#define __INPUT_H__
+#pragma once
 
 #include "main.h"
 
@@ -30,5 +29,3 @@ void create_and_cut_row(buffer_t* buf, size_t dest_index, size_t* str_s, size_t 
     @param buffer buffer
 */
 void process_keypress(int ch, buffer_t* buffer, pstate_t state, bool *pquit);
-
-#endif
