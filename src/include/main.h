@@ -39,7 +39,7 @@ typedef struct ROW {
 	size_t index;
 	size_t size;
 	char* contents;
-} row_t, *prow_t;
+} row_t;
 
 typedef struct BUFFER {
 	row_t rows[MAX_ROWS];
@@ -47,17 +47,11 @@ typedef struct BUFFER {
 	size_t cur_pos;
 	size_t row_s;
 	char* filename;
-} buffer_t, *pbuffer_t;
+} buffer_t;
 
 typedef struct STATE {
 	int y, x;
 	int crow, ccol;
-} state_t, *pstate_t;
-
-// local libs
-#include "input.h"
-#include "output.h"
-
-/* Functions */
+} state_t;
 
 void read_file_to_buffer(buffer_t* buffer, char* filename);

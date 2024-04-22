@@ -14,53 +14,10 @@
 */
 
 #include "include/main.h"
+#include "include/input.h"
+#include "include/output.h"
 
 /* INIT */
-
-int main(int argc, char* argv[]) {
-	bool QUIT = false;
-	pstate_t state = malloc(sizeof(state));
-
-	// check if given name
-	char* filename = NULL;
-	if (argc > 1) filename = argv[1];
-
-	// terminal setup
-	initscr();
-	raw();
-	keypad(stdscr, TRUE);
-	noecho();
-	getmaxyx(stdscr, state->y, state->x);
-	set_escdelay(ESCDELAY);
-
-	// buffer init
-	buffer_t buffer = {0};
-	for (size_t i = 0; i < MAX_ROWS; i++) {
-		buffer.rows[i].contents = calloc(MAX_STRING_SIZE, sizeof(char));
-	}
-	if (filename != NULL) read_file_to_buffer(&buffer, filename);
-	else buffer.filename = "out.txt";
-
-	// main loop
-	int ch = 0;
-	while (ch != ctrl('q') && QUIT != true) {
-		clear();
-		getmaxyx(stdscr, state->y, state->x);
-		refresh();
-		draw_status_bar(&buffer, &ch, state);
-		draw_buffer(&buffer, state);
-		ch = getch();
-		process_keypress(ch, &buffer, state, &QUIT);
-		getyx(stdscr, state->crow, state->ccol);
-	}
-
-	free(state);
-
-	refresh();
-	endwin();
-
-	return 0;
-}
 
 void read_file_to_buffer(buffer_t* buffer, char* filename) {
 	buffer->filename = filename;
@@ -86,4 +43,49 @@ void read_file_to_buffer(buffer_t* buffer, char* filename) {
 		}
 	}
 	fclose(file);
+}
+
+int main(int argc, char* argv[]) {
+	int QUIT = 0;
+	state_t* state = malloc(sizeof(state));
+
+	// check if given name
+	char* filename = NULL;
+	if (argc > 1) filename = argv[1];
+
+	// terminal setup
+	initscr();
+	raw();
+	keypad(stdscr, TRUE);
+	noecho();
+	getmaxyx(stdscr, state->y, state->x);
+	set_escdelay(ESCDELAY);
+
+	// buffer init
+	buffer_t buffer = {0};
+	for (size_t i = 0; i < MAX_ROWS; i++) {
+		buffer.rows[i].contents = calloc(MAX_STRING_SIZE, sizeof(char));
+	}
+	if (filename != NULL) read_file_to_buffer(&buffer, filename);
+	else buffer.filename = "out.txt";
+
+	// main loop
+	int ch = 0;
+	while (ch != ctrl('q') && QUIT != 1) {
+		clear();
+		getmaxyx(stdscr, state->y, state->x);
+		refresh();
+		draw_status_bar(&buffer, &ch, state);
+		draw_buffer(&buffer, state);
+		ch = getch();
+		process_keypress(ch, &buffer, state, &QUIT);
+		getyx(stdscr, state->crow, state->ccol);
+	}
+
+	free(state);
+
+	refresh();
+	endwin();
+
+	return 0;
 }

@@ -69,7 +69,7 @@ void create_and_cut_row(buffer_t* buf, size_t dest_index, size_t* str_s, size_t 
 	free(temp);
 }
 
-void process_keypress(int ch, buffer_t* buffer, pstate_t state, bool *pquit) {
+void process_keypress(int ch, buffer_t* buffer, state_t* state, int* quit) {
 	if (ch == ctrl('s') || ch == ctrl('S')) {
 		FILE* file = fopen(buffer->filename, "w");
 		for (size_t i = 0; i <= buffer->row_s; i++) {
@@ -77,7 +77,7 @@ void process_keypress(int ch, buffer_t* buffer, pstate_t state, bool *pquit) {
 			fputc('\n', file);
 		}
 		fclose(file);
-		pquit = (bool *) true;
+		*quit = 1;
 	} else if (ch == KEY_DC || ch == KEY_RESIZE) {
 		// ill add it later
 	} else if (ch == KEY_BACKSPACE) {

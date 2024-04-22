@@ -28,4 +28,4 @@ void create_and_cut_row(buffer_t* buf, size_t dest_index, size_t* str_s, size_t 
     @param ch keyboard key
     @param buffer buffer
 */
-void process_keypress(int ch, buffer_t* buffer, pstate_t state, bool *pquit);
+void process_keypress(int ch, buffer_t* buffer, state_t* state, int* quit);
